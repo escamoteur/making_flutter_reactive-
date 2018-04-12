@@ -21,7 +21,9 @@ class WeatherService {
                 .map( (data) // convert JSON result in ModelObject
                 {
                       return new WeatherInCities.fromJson(json.decode(data.body)).Cities
-                        .where( (weatherInCity) =>  cityNameFilter.isEmpty || weatherInCity.Name.toUpperCase().startsWith(cityNameFilter.toUpperCase()))
+                        .where( (weatherInCity) => cityNameFilter ==null || 
+                                                  cityNameFilter.isEmpty || 
+                                                  weatherInCity.Name.toUpperCase().startsWith(cityNameFilter.toUpperCase()))
                           .map((weatherInCity) => new WeatherEntry(weatherInCity) )
                             .toList();
                 });
