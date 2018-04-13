@@ -16,7 +16,7 @@ import '../service/weather_service.dart';
 
     HomePageAppModel()
     {
-        // Command expects a bool value when executed and issues the value on it's result Observable (stream)
+        // Command expects a bool value when executed and issues the value on its result Observable (stream)
         switchChangedCommand = RxCommand.createSync3<bool,bool>((b)=>b);
 
         // We pass the result of switchChangedCommand as canExecute Observable to the upDateWeatherCommand

@@ -12,7 +12,8 @@ dependencies:
   json_annotation: ^0.2.2
   http: "^0.11.3+16"
   rx_command: ^1.0.1
-
+  rx_widgets:
+  
 dev_dependencies: 
   
   build_runner: ^0.7.6
