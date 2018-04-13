@@ -8,15 +8,19 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.0
-  rxdart : any
+  rxdart : 0.16.6
   json_annotation: ^0.2.2
   http: "^0.11.3+16"
   rx_command: ^1.0.1
 
 dev_dependencies: 
-  
-  build_runner: ^0.7.6
+  test: ^0.12.32
+  mockito: ^2.2.3
+  quiver: ^0.28.0
+  build_runner: ^0.8.0
   json_serializable: ^0.4.0
+  flutter_test:
+    sdk: flutter
 
 
 # For information on the generic Dart part of this file, see the
@@ -29,6 +33,11 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  fonts:
+   - family:  WeatherIcons
+     fonts:
+      - asset: fonts/WeatherIcons.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:
