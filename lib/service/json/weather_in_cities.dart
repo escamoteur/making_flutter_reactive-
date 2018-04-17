@@ -1,175 +1,153 @@
-import "package:json_annotation/json_annotation.dart";    
+import "package:json_annotation/json_annotation.dart";
 
-part "weather_in_cities.g.dart";  
+part "weather_in_cities.g.dart";
 
-    @JsonSerializable()
-    class WeatherInCities extends Object with _$WeatherInCitiesSerializerMixin
-    {                                   
-        WeatherInCities(this.Cnt, this.Calctime, this.Cod, this.Cities);
+@JsonSerializable()
+class WeatherInCities extends Object with _$WeatherInCitiesSerializerMixin {
+  WeatherInCities(this.cnt, this.calctime, this.cod, this.cities);
 
+  @JsonKey(name: 'cnt')
+  final int cnt;
 
-        @JsonKey(name: 'cnt')
-        final int Cnt ;
+  @JsonKey(name: 'calctime')
+  final double calctime;
 
-        @JsonKey(name: 'calctime')
-        final double Calctime ;
+  @JsonKey(name: 'cod')
+  final int cod;
 
-        @JsonKey(name: 'cod')
-        final int Cod ;
+  @JsonKey(name: 'list')
+  final List<City> cities;
 
-        @JsonKey(name: 'list')
-        final List<City> Cities ;
+  factory WeatherInCities.fromJson(Map<String, dynamic> json) =>
+      _$WeatherInCitiesFromJson(json);
+}
 
-        factory WeatherInCities.fromJson(Map<String,dynamic> json) => _$WeatherInCitiesFromJson(json);
-    }
+@JsonSerializable()
+class City extends Object with _$CitySerializerMixin {
+  City(this.id, this.coord, this.clouds, this.dt, this.name, this.main,
+      this.rain, this.weather, this.wind);
 
-    @JsonSerializable()
-    class City extends Object with _$CitySerializerMixin
-    {
+  @JsonKey(name: 'id')
+  final int id;
 
-        City(this.Id, this.coord, this.clouds, this.Dt, this.Name, this.main, this.rain, this.weather, this.wind);
+  @JsonKey(name: 'coord')
+  final Coord coord;
 
-        @JsonKey(name: 'id')
-        final int Id ;
+  @JsonKey(name: 'clouds')
+  final Clouds clouds;
 
-        @JsonKey(name: 'coord')
-        final Coord coord ;
+  @JsonKey(name: 'dt')
+  final int dt;
 
-        @JsonKey(name: 'clouds')
-        final Clouds clouds ;
+  @JsonKey(name: 'name')
+  final String name;
 
-        @JsonKey(name: 'dt')
-        final int Dt ;
+  @JsonKey(name: 'main')
+  final Main main;
 
-        @JsonKey(name: 'name')
-        final String Name ;
+  @JsonKey(name: 'rain')
+  final Rain rain;
 
-    
-        @JsonKey(name: 'main')
-        final Main main ;
+  @JsonKey(name: 'weather')
+  final List<Weather> weather;
 
-        @JsonKey(name: 'rain')
-        final Rain rain ;
+  @JsonKey(name: 'wind')
+  final Wind wind;
 
-        @JsonKey(name: 'weather')
-        final List<Weather> weather ;
+  factory City.fromJson(Map<String, dynamic> json) => _$CityFromJson(json);
+}
 
-        @JsonKey(name: 'wind')
-        final Wind wind ;
+@JsonSerializable()
+class Coord extends Object with _$CoordSerializerMixin {
+  Coord(this.lat, this.lon);
 
-        factory City.fromJson(Map<String,dynamic> json) => _$CityFromJson(json);
+  @JsonKey(name: 'Lat')
+  final double lat;
 
+  @JsonKey(name: 'Lon')
+  final double lon;
 
-    }
+  factory Coord.fromJson(Map<String, dynamic> json) => _$CoordFromJson(json);
+}
 
-    @JsonSerializable()
-    class Coord extends Object with _$CoordSerializerMixin
-    {
-        Coord(this.Lat, this.Lon);
+@JsonSerializable()
+class Clouds extends Object with _$CloudsSerializerMixin {
+  Clouds(this.today);
 
-        @JsonKey(name: 'Lat')
-        final double Lat ;
+  @JsonKey(name: 'today')
+  final int today;
 
-        @JsonKey(name: 'Lon')
-        final double Lon ;
+  factory Clouds.fromJson(Map<String, dynamic> json) => _$CloudsFromJson(json);
+}
 
-        factory Coord.fromJson(Map<String,dynamic> json) => _$CoordFromJson(json);
+@JsonSerializable()
+class Main extends Object with _$MainSerializerMixin {
+  Main(this.seaLevel, this.humidity, this.grndLevel, this.pressure,
+      this.tempMax, this.temp, this.tempMin);
 
-    }
+  @JsonKey(name: 'sea_level', nullable: true)
+  final double seaLevel;
 
-    @JsonSerializable()
-    class Clouds extends Object with _$CloudsSerializerMixin
-    {
+  @JsonKey(name: 'humidity')
+  final int humidity;
 
-        Clouds(this.Today);
+  @JsonKey(name: 'grnd_level', nullable: true)
+  final double grndLevel;
 
-        @JsonKey(name: 'today')
-        final int Today ;
+  @JsonKey(name: 'pressure')
+  final double pressure;
 
-        factory Clouds.fromJson(Map<String,dynamic> json) => _$CloudsFromJson(json);
+  @JsonKey(name: 'temp_max')
+  final double tempMax;
 
-    }
+  @JsonKey(name: 'temp')
+  final double temp;
 
-    @JsonSerializable()
-    class Main extends Object with _$MainSerializerMixin
-    {
-        Main(this.SeaLevel, this.Humidity, this.GrndLevel, this.Pressure, this.TempMax, this.Temp, this.TempMin); 
+  @JsonKey(name: 'temp_min')
+  final double tempMin;
 
+  factory Main.fromJson(Map<String, dynamic> json) => _$MainFromJson(json);
+}
 
-        @JsonKey(name: 'sea_level', nullable: true)
-        final double SeaLevel ;
+@JsonSerializable()
+class Rain extends Object with _$RainSerializerMixin {
+  Rain(this.threeH);
 
-        @JsonKey(name: 'humidity')
-        final int Humidity ;
+  @JsonKey(name: '3h')
+  final double threeH;
 
-        @JsonKey(name: 'grnd_level',nullable: true)
-        final double GrndLevel ;
+  factory Rain.fromJson(Map<String, dynamic> json) => _$RainFromJson(json);
+}
 
-        @JsonKey(name: 'pressure')
-        final double Pressure ;
+@JsonSerializable()
+class Weather extends Object with _$WeatherSerializerMixin {
+  Weather(this.icon, this.description, this.id, this.main);
 
-        @JsonKey(name: 'temp_max')
-        final double TempMax ;
+  @JsonKey(name: 'icon')
+  final String icon;
 
-        @JsonKey(name: 'temp')
-        final double Temp ;
+  @JsonKey(name: 'description')
+  final String description;
 
-        @JsonKey(name: 'temp_min')
-        final double TempMin ;
+  @JsonKey(name: 'id')
+  final int id;
 
+  @JsonKey(name: 'main')
+  final String main;
 
+  factory Weather.fromJson(Map<String, dynamic> json) =>
+      _$WeatherFromJson(json);
+}
 
-        factory Main.fromJson(Map<String,dynamic> json) => _$MainFromJson(json);
-    
-    }
+@JsonSerializable()
+class Wind extends Object with _$WindSerializerMixin {
+  Wind(this.deg, this.speed);
 
-    @JsonSerializable()
-    class Rain extends Object with _$RainSerializerMixin
-    {
+  @JsonKey(name: 'deg')
+  final double deg;
 
-        Rain(this.The3h);
+  @JsonKey(name: 'speed')
+  final double speed;
 
-        @JsonKey(name: '3h')
-        final double The3h ;
-
-        factory Rain.fromJson(Map<String,dynamic> json) => _$RainFromJson(json);
-
-    }
-
-    @JsonSerializable()
-    class Weather extends Object with _$WeatherSerializerMixin
-    {
-
-        Weather(this.Icon, this.Description, this.Id, this.Main);
-
-        @JsonKey(name: 'icon')
-        final String Icon ;
-
-        @JsonKey(name: 'description')
-        final String Description ;
-
-        @JsonKey(name: 'id')
-        final int Id ;
-
-        @JsonKey(name: 'main')
-        final String Main ;
-
-        factory Weather.fromJson(Map<String,dynamic> json) => _$WeatherFromJson(json);
-
-
-    }
-
-    @JsonSerializable()
-    class Wind extends Object with _$WindSerializerMixin
-    {
-        Wind(this.Deg, this.Speed);
-
-        @JsonKey(name: 'deg')
-        final double Deg ;
-
-        @JsonKey(name: 'speed')
-        final double Speed ;
-
-        factory Wind.fromJson(Map<String,dynamic> json) => _$WindFromJson(json);
-        
-    }
+  factory Wind.fromJson(Map<String, dynamic> json) => _$WindFromJson(json);
+}

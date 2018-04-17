@@ -1,49 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter_weather_demo/homepage/homepage.dart';
+import 'package:flutter_weather_demo/homepage/homepage_model.dart';
+import 'package:flutter_weather_demo/model_provider.dart';
+import 'package:flutter_weather_demo/service/weather_service.dart';
+import 'package:http/http.dart' as http;
 
-import 'homepage/homepage.dart';
-import 'homepage/homepage_appmodel.dart';
+void main() {
+  final weatherService = new WeatherService(new http.Client());
+  final homePageModel = new HomePageModel(weatherService);
 
-void main() => runApp(new MyApp());
+  runApp(new MyApp(
+    model: homePageModel,
+  ));
+}
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
- 
+  final HomePageModel model;
+
+  const MyApp({Key key, this.model}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return new TheViewModel( 
-                  theModel:  new HomePageAppModel(),
-                  child: 
-                  new MaterialApp(
-                    title: 'Flutter Demo',
-                    home: new HomePage()
-
-
-                  ),
+    return new ModelProvider(
+      model: model,
+      child: new MaterialApp(
+        title: 'Flutter Demo',
+        theme: new ThemeData.dark().copyWith(
+          disabledColor: Colors.white12,
+          primaryColor: new Color(0xFF1C262A),
+          buttonColor: new Color(0xFF1C262A),
+          accentColor: new Color(0xFFA7D9D5),
+          scaffoldBackgroundColor: new Color.fromRGBO(38, 50, 56, 1.0),
+        ),
+        home: new HomePage(),
+      ),
     );
   }
 }
-
-
-
-// InheritedWidgets allow you to propagate values down the widgettree. 
-// it can then be accessed by just writing  TheViewModel.of(context)
-class TheViewModel extends InheritedWidget
-{
-  final HomePageAppModel theModel;
-
-  const TheViewModel({Key key, 
-                      @required 
-                      this.theModel, 
-                      @required 
-                      Widget child}) :  assert(theModel != null),assert(child != null),
-                      super(key: key, child: child);
-
-  static HomePageAppModel of(BuildContext context) => (context.inheritFromWidgetOfExactType(TheViewModel)as TheViewModel).theModel;                  
-
-
-  @override
-  bool updateShouldNotify(TheViewModel oldWidget) => theModel != oldWidget.theModel;
-  
-}
-

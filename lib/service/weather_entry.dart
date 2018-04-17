@@ -1,21 +1,24 @@
 import 'json/weather_in_cities.dart';
 
 class WeatherEntry {
-   String cityName;
-   String iconURL;
-   double wind;
-   double rain;
-   double temperature;
-   String description;
+  final String cityName;
+  final double wind;
+  final double temperature;
+  final String description;
+  final int weatherId;
 
-  WeatherEntry(City city)
-  {
-      this.cityName = city.Name;
-      this.iconURL = city.weather != null ?  "http://openweathermap.org/img/w/${city.weather[0].Icon}.png" :  null;
-      this.description = city.weather != null ?  city.weather[0].Description : null;
-      this.wind =city.wind.Speed;
-      this.rain = rain;
-      this.temperature = city.main.Temp;
+  WeatherEntry(
+    this.cityName,
+    this.wind,
+    this.temperature,
+    this.description,
+    this.weatherId,
+  );
 
-  }
+  WeatherEntry.from(City city)
+      : cityName = city.name,
+        wind = city.wind.speed,
+        temperature = city.main.temp,
+        description = city.weather[0]?.description,
+        weatherId = city.weather[0].id;
 }

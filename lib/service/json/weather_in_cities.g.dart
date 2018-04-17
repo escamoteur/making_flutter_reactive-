@@ -17,15 +17,19 @@ WeatherInCities _$WeatherInCitiesFromJson(Map<String, dynamic> json) =>
             ?.toList());
 
 abstract class _$WeatherInCitiesSerializerMixin {
-  int get Cnt;
-  double get Calctime;
-  int get Cod;
-  List<City> get Cities;
+  int get cnt;
+
+  double get calctime;
+
+  int get cod;
+
+  List<City> get cities;
+
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'cnt': Cnt,
-        'calctime': Calctime,
-        'cod': Cod,
-        'list': Cities
+        'cnt': cnt,
+        'calctime': calctime,
+        'cod': cod,
+        'list': cities
       };
 }
 
@@ -54,21 +58,30 @@ City _$CityFromJson(Map<String, dynamic> json) => new City(
         : new Wind.fromJson(json['wind'] as Map<String, dynamic>));
 
 abstract class _$CitySerializerMixin {
-  int get Id;
+  int get id;
+
   Coord get coord;
+
   Clouds get clouds;
-  int get Dt;
-  String get Name;
+
+  int get dt;
+
+  String get name;
+
   Main get main;
+
   Rain get rain;
+
   List<Weather> get weather;
+
   Wind get wind;
+
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'id': Id,
+        'id': id,
         'coord': coord,
         'clouds': clouds,
-        'dt': Dt,
-        'name': Name,
+        'dt': dt,
+        'name': name,
         'main': main,
         'rain': rain,
         'weather': weather,
@@ -80,17 +93,20 @@ Coord _$CoordFromJson(Map<String, dynamic> json) => new Coord(
     (json['Lat'] as num)?.toDouble(), (json['Lon'] as num)?.toDouble());
 
 abstract class _$CoordSerializerMixin {
-  double get Lat;
-  double get Lon;
-  Map<String, dynamic> toJson() => <String, dynamic>{'Lat': Lat, 'Lon': Lon};
+  double get lat;
+
+  double get lon;
+
+  Map<String, dynamic> toJson() => <String, dynamic>{'Lat': lat, 'Lon': lon};
 }
 
 Clouds _$CloudsFromJson(Map<String, dynamic> json) =>
     new Clouds(json['today'] as int);
 
 abstract class _$CloudsSerializerMixin {
-  int get Today;
-  Map<String, dynamic> toJson() => <String, dynamic>{'today': Today};
+  int get today;
+
+  Map<String, dynamic> toJson() => <String, dynamic>{'today': today};
 }
 
 Main _$MainFromJson(Map<String, dynamic> json) => new Main(
@@ -103,21 +119,28 @@ Main _$MainFromJson(Map<String, dynamic> json) => new Main(
     (json['temp_min'] as num)?.toDouble());
 
 abstract class _$MainSerializerMixin {
-  double get SeaLevel;
-  int get Humidity;
-  double get GrndLevel;
-  double get Pressure;
-  double get TempMax;
-  double get Temp;
-  double get TempMin;
+  double get seaLevel;
+
+  int get humidity;
+
+  double get grndLevel;
+
+  double get pressure;
+
+  double get tempMax;
+
+  double get temp;
+
+  double get tempMin;
+
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'sea_level': SeaLevel,
-        'humidity': Humidity,
-        'grnd_level': GrndLevel,
-        'pressure': Pressure,
-        'temp_max': TempMax,
-        'temp': Temp,
-        'temp_min': TempMin
+        'sea_level': seaLevel,
+        'humidity': humidity,
+        'grnd_level': grndLevel,
+        'pressure': pressure,
+        'temp_max': tempMax,
+        'temp': temp,
+        'temp_min': tempMin
       };
 }
 
@@ -125,8 +148,9 @@ Rain _$RainFromJson(Map<String, dynamic> json) =>
     new Rain((json['3h'] as num)?.toDouble());
 
 abstract class _$RainSerializerMixin {
-  double get The3h;
-  Map<String, dynamic> toJson() => <String, dynamic>{'3h': The3h};
+  double get threeH;
+
+  Map<String, dynamic> toJson() => <String, dynamic>{'3h': threeH};
 }
 
 Weather _$WeatherFromJson(Map<String, dynamic> json) => new Weather(
@@ -136,15 +160,19 @@ Weather _$WeatherFromJson(Map<String, dynamic> json) => new Weather(
     json['main'] as String);
 
 abstract class _$WeatherSerializerMixin {
-  String get Icon;
-  String get Description;
-  int get Id;
-  String get Main;
+  String get icon;
+
+  String get description;
+
+  int get id;
+
+  String get main;
+
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'icon': Icon,
-        'description': Description,
-        'id': Id,
-        'main': Main
+        'icon': icon,
+        'description': description,
+        'id': id,
+        'main': main
       };
 }
 
@@ -152,8 +180,10 @@ Wind _$WindFromJson(Map<String, dynamic> json) => new Wind(
     (json['deg'] as num)?.toDouble(), (json['speed'] as num)?.toDouble());
 
 abstract class _$WindSerializerMixin {
-  double get Deg;
-  double get Speed;
+  double get deg;
+
+  double get speed;
+
   Map<String, dynamic> toJson() =>
-      <String, dynamic>{'deg': Deg, 'speed': Speed};
+      <String, dynamic>{'deg': deg, 'speed': speed};
 }
