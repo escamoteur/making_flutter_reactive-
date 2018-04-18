@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather_demo/homepage/weather_list_view.dart';
 import 'package:flutter_weather_demo/keys.dart';
 import 'package:flutter_weather_demo/model_provider.dart';
+import 'package:rx_widgets/rx_widgets.dart';
+
+import '../service/weather_entry.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -29,36 +32,18 @@ class HomePageState extends State<HomePage> {
               decoration: new InputDecoration(
                 hintText: "Filter cities",
               ),
-              style: new TextStyle(
+              style:  TextStyle(
                 fontSize: 20.0,
               ),
               onChanged: ModelProvider.of(context).textChangedCommand,
             ),
           ),
           new Expanded(
-            child: new StreamBuilder<bool>(
-              // Handle events to show / hide spinner
-              stream:
-                  ModelProvider.of(context).updateWeatherCommand.isExecuting,
-              initialData: true,
-              builder: (context, isRunning) {
-                // if true we show a buys Spinner otherwise the ListView
-                if (isRunning.hasData && isRunning.data) {
-                  return new Center(
-                    child: new Container(
-                      width: 50.0,
-                      height: 50.0,
-                      child: new CircularProgressIndicator(
-                        key: AppKeys.loadingSpinner,
-                      ),
-                    ),
-                  );
-                } else {
-                  return new WeatherListView(
-                    key: AppKeys.weatherList,
-                  );
-                }
-              },
+            child: new RxLoader<List<WeatherEntry>>(
+              key: AppKeys.loadingSpinner,
+              radius: 25.0,
+              commandResults: ModelProvider.of(context).updateWeatherCommand,
+              dataBuilder: (context, data) => new WeatherListView(data ,key: AppKeys.weatherList),
             ),
           ),
           new Padding(

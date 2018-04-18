@@ -6,36 +6,22 @@ import 'package:flutter_weather_demo/service/weather_entry.dart';
 import 'package:flutter_weather_demo/weather_icons.dart';
 
 class WeatherListView extends StatelessWidget {
-  WeatherListView({Key key}) : super(key: key);
+  
+  List<WeatherEntry> data;
 
+ 
+  WeatherListView(this.data, {Key key}) : super(key: key);
+
+ 
   @override
   Widget build(BuildContext context) {
-    // StreamBuilder rebuilds its subtree on every item the stream issues
-    return new StreamBuilder<List<WeatherEntry>>(
-      // Fetch list of cities from the HomePageModel, which is passed down
-      // the tree by the ModelProvider InheritedWidget,
-      stream: ModelProvider.of(context).updateWeatherCommand.results,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data.length > 0) {
-            return new ListView.builder(
+    return new ListView.builder(
               key: AppKeys.cityList,
-              itemCount: snapshot.data.length,
+              itemCount: data.length,
               itemBuilder: (BuildContext context, int index) =>
-                  new WeatherItem(entry: snapshot.data[index]),
+                  new WeatherItem(entry: data[index]),
             );
-          } else {
-            return new Text('No Items', key: AppKeys.noItems);
-          }
-        } else if (snapshot.hasError) {
-          // Todo: Figure out a good way to handle errors
-          return new Text('Error', key: AppKeys.loadingError);
-        } else {
-          return new Container(key: AppKeys.empty);
-        }
-      },
-    );
-  }
+   }
 }
 
 class WeatherItem extends StatelessWidget {
