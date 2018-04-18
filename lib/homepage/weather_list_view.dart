@@ -15,11 +15,11 @@ class WeatherListView extends StatelessWidget {
  
   @override
   Widget build(BuildContext context) {
-    return new ListView.builder(
+    return ListView.builder(
               key: AppKeys.cityList,
               itemCount: data.length,
               itemBuilder: (BuildContext context, int index) =>
-                               new WeatherItem(entry: data[index]),
+                               WeatherItem(entry: data[index]),
             );
    }
 }
@@ -31,11 +31,11 @@ class WeatherItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new ListTile(
-                  leading: new Icon(_weatherIdToIcon(entry.weatherId), size: 28.0,),
-                  title: new Text(entry.cityName),
-                  subtitle: new Text(entry.description, style: new TextStyle(fontStyle: FontStyle.italic),),
-                  trailing: new Text('${entry.temperature.round()} °', style: new TextStyle(fontSize: 20.0),
+    return ListTile(
+                  leading: Icon(_weatherIdToIcon(entry.weatherId), size: 28.0,),
+                  title: Text(entry.cityName),
+                  subtitle: Text(entry.description, style: TextStyle(fontStyle: FontStyle.italic),),
+                  trailing: Text('${entry.temperature.round()} °', style: TextStyle(fontSize: 20.0),
                   ),
     );
   }

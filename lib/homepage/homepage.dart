@@ -9,66 +9,66 @@ import '../service/weather_entry.dart';
 class HomePage extends StatefulWidget {
   @override
   HomePageState createState() {
-    return new HomePageState();
+    return HomePageState();
   }
 }
 
 class HomePageState extends State<HomePage> {
-  final TextEditingController _controller = new TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(title: new Text("WeatherDemo")),
+    return Scaffold(
+      appBar: AppBar(title: Text("WeatherDemo")),
       resizeToAvoidBottomPadding: false,
       body: 
-        new Column(children: <Widget>
+        Column(children: <Widget>
         [
-          new Padding(
+          Padding(
             padding: const EdgeInsets.all(16.0),
             child: 
-            new TextField(
+            TextField(
                     key: AppKeys.textField,
                     autocorrect: false,
                     controller: _controller,
-                    decoration: new InputDecoration(hintText: "Filter cities",),
+                    decoration: InputDecoration(hintText: "Filter cities",),
                     style:  TextStyle(fontSize: 20.0,),
                     onChanged: ModelProvider.of(context).textChangedCommand,
                     ),
           ),
-          new Expanded(
+          Expanded(
                 child: 
-                new RxLoader<List<WeatherEntry>>(
+                RxLoader<List<WeatherEntry>>(
                         key: AppKeys.loadingSpinner,
                         radius: 25.0,
                         commandResults: ModelProvider.of(context).updateWeatherCommand,
-                        dataBuilder: (context, data) => new WeatherListView(data ,key: AppKeys.weatherList),
+                        dataBuilder: (context, data) => WeatherListView(data ,key: AppKeys.weatherList),
                         ),
           ),
-          new Padding(
+          Padding(
             padding: const EdgeInsets.all(8.0),
             child: 
-            new Row(children: <Widget>
+            Row(children: <Widget>
             [
-                new Expanded(
+                Expanded(
                     child: 
                     // This might be solved with a Streambuilder to but it should show `WidgetSelector`
-                    new WidgetSelector(
-                                    buildEvents: ModelProvider.of(context).updateWeatherCommand.canExecute,   //We access our ViewModel through the inherited Widget
-                                    onTrue:  new RaisedButton(    
-                                                    key: AppKeys.updateButtonEnabled,                           
-                                                    child: new Text("Update"), 
-                                                    onPressed: ModelProvider.of(context).updateWeatherCommand,
-                                                    ),
-                                    onFalse:  new RaisedButton(                               
-                                                    key: AppKeys.updateButtonDisabled,                           
-                                                    child: new Text("Please Wait"), 
-                                                    onPressed: null,
-                                                    ),
+                    WidgetSelector(
+                            buildEvents: ModelProvider.of(context).updateWeatherCommand.canExecute,   //We access our ViewModel through the inherited Widget
+                            onTrue:  RaisedButton(    
+                                            key: AppKeys.updateButtonEnabled,                           
+                                            child: Text("Update"), 
+                                            onPressed: ModelProvider.of(context).updateWeatherCommand,
+                                            ),
+                            onFalse:  RaisedButton(                               
+                                            key: AppKeys.updateButtonDisabled,                           
+                                            child: Text("Please Wait"), 
+                                            onPressed: null,
+                                            ),
                             
                         ),
                 ),
-                new StateFullSwitch(
+                StateFullSwitch(
                         state: true,
                         onChanged: ModelProvider.of(context).switchChangedCommand,
                    )
@@ -91,7 +91,7 @@ class StateFullSwitch extends StatefulWidget {
 
   @override
   StateFullSwitchState createState() {
-    return new StateFullSwitchState(state, onChanged);
+    return StateFullSwitchState(state, onChanged);
   }
 }
 
@@ -103,7 +103,7 @@ class StateFullSwitchState extends State<StateFullSwitch> {
 
   @override
   Widget build(BuildContext context) {
-    return new Switch(
+    return Switch(
       key: AppKeys.updateSwitch,
       value: state,
       onChanged: (b) {
