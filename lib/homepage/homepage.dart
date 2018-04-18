@@ -41,7 +41,7 @@ class HomePageState extends State<HomePage> {
                 RxLoader<List<WeatherEntry>>(
                         key: AppKeys.loadingSpinner,
                         radius: 25.0,
-                        commandResults: ModelProvider.of(context).updateWeatherCommand,
+                        commandResults: ModelProvider.of(context).updateWeatherCommand.stream,
                         dataBuilder: (context, data) => WeatherListView(data ,key: AppKeys.weatherList),
                         ),
           ),

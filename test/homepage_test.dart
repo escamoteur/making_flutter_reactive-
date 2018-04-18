@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_weather_demo/homepage/homepage.dart';
@@ -13,10 +15,11 @@ import '../lib/service/weather_entry.dart';
 class MockModel extends Mock implements HomePageModel {}
 
 class MockCommand<TParam,TResult> extends Mock implements RxCommand<TParam,TResult> {}
+class MockStream<T>  extends Mock implements Stream<T>{}
 
 main() {
   group('HomePage', () {
-    testWidgets('Shows a loading spinner when executing', (tester) async {
+    testWidgets('Shows a loading spinner when executing and disables the button', (tester) async {
       final model = new MockModel();
       final command = new MockCommand<String,List<WeatherEntry>>();
       final widget = new ModelProvider(
@@ -24,14 +27,21 @@ main() {
         child: new MaterialApp(home: new HomePage()),
       );
 
-      when(command).thenReturn(new Observable<CommandResult<WeatherEntry>>.just(new CommandResult<WeatherEntry>(new WeatherEntry("Test",0.0,0.0,"TestCondition",0), null, true)));
+      when(command.stream).thenReturn(new Observable<CommandResult<WeatherEntry>>.just(new CommandResult<WeatherEntry>(null, null, true)));
+      when(command.canExecute).thenReturn(new Observable<bool>.just(false));
       when(model.updateWeatherCommand).thenReturn(command);
 
       await tester.pumpWidget(widget);
 
       expect(find.byKey(AppKeys.loadingSpinner), findsOneWidget);
+      expect(find.byKey(AppKeys.updateButtonDisabled), findsOneWidget);
       expect(find.byKey(AppKeys.weatherList), findsNothing);
     });
+
+
+//      when(command.stream).thenReturn(new Observable<CommandResult<WeatherEntry>>.just(new CommandResult<WeatherEntry>(new WeatherEntry("Test",0.0,0.0,"TestCondition",0), null, true)));
+//      when(command.canExecute).thenReturn(new Observable<bool>.just(true));
+
 
  /*    testWidgets('Shows the weather list when done executing', (tester) async {
       final model = new MockModel();
