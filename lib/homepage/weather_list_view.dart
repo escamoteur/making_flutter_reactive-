@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather_demo/keys.dart';
-import 'package:flutter_weather_demo/model_provider.dart';
 import 'package:flutter_weather_demo/service/weather_entry.dart';
 import 'package:flutter_weather_demo/weather_icons.dart';
 
+
 class WeatherListView extends StatelessWidget {
   
-  List<WeatherEntry> data;
+  final List<WeatherEntry> data;
 
  
   WeatherListView(this.data, {Key key}) : super(key: key);
@@ -19,7 +19,7 @@ class WeatherListView extends StatelessWidget {
               key: AppKeys.cityList,
               itemCount: data.length,
               itemBuilder: (BuildContext context, int index) =>
-                  new WeatherItem(entry: data[index]),
+                               new WeatherItem(entry: data[index]),
             );
    }
 }
@@ -32,19 +32,11 @@ class WeatherItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new ListTile(
-      leading: new Icon(
-        _weatherIdToIcon(entry.weatherId),
-        size: 28.0,
-      ),
-      title: new Text(entry.cityName),
-      subtitle: new Text(
-        entry.description,
-        style: new TextStyle(fontStyle: FontStyle.italic),
-      ),
-      trailing: new Text(
-        '${entry.temperature.round()} °',
-        style: new TextStyle(fontSize: 20.0),
-      ),
+                  leading: new Icon(_weatherIdToIcon(entry.weatherId), size: 28.0,),
+                  title: new Text(entry.cityName),
+                  subtitle: new Text(entry.description, style: new TextStyle(fontStyle: FontStyle.italic),),
+                  trailing: new Text('${entry.temperature.round()} °', style: new TextStyle(fontSize: 20.0),
+                  ),
     );
   }
 

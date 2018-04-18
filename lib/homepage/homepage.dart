@@ -21,62 +21,57 @@ class HomePageState extends State<HomePage> {
     return new Scaffold(
       appBar: new AppBar(title: new Text("WeatherDemo")),
       resizeToAvoidBottomPadding: false,
-      body: new Column(
-        children: <Widget>[
+      body: 
+        new Column(children: <Widget>
+        [
           new Padding(
             padding: const EdgeInsets.all(16.0),
-            child: new TextField(
-              key: AppKeys.textField,
-              autocorrect: false,
-              controller: _controller,
-              decoration: new InputDecoration(
-                hintText: "Filter cities",
-              ),
-              style:  TextStyle(
-                fontSize: 20.0,
-              ),
-              onChanged: ModelProvider.of(context).textChangedCommand,
-            ),
+            child: 
+            new TextField(
+                    key: AppKeys.textField,
+                    autocorrect: false,
+                    controller: _controller,
+                    decoration: new InputDecoration(hintText: "Filter cities",),
+                    style:  TextStyle(fontSize: 20.0,),
+                    onChanged: ModelProvider.of(context).textChangedCommand,
+                    ),
           ),
           new Expanded(
-            child: new RxLoader<List<WeatherEntry>>(
-              key: AppKeys.loadingSpinner,
-              radius: 25.0,
-              commandResults: ModelProvider.of(context).updateWeatherCommand,
-              dataBuilder: (context, data) => new WeatherListView(data ,key: AppKeys.weatherList),
-            ),
+                child: 
+                new RxLoader<List<WeatherEntry>>(
+                        key: AppKeys.loadingSpinner,
+                        radius: 25.0,
+                        commandResults: ModelProvider.of(context).updateWeatherCommand,
+                        dataBuilder: (context, data) => new WeatherListView(data ,key: AppKeys.weatherList),
+                        ),
           ),
           new Padding(
             padding: const EdgeInsets.all(8.0),
-            child: new Row(
-              children: <Widget>[
+            child: 
+            new Row(children: <Widget>
+            [
                 new Expanded(
-                  // We use a stream builder to toggle the enabled state of the
-                  // button. StreamBuilder rebuilds its subtree on every item
-                  // the stream issues
-                  child: new StreamBuilder<bool>(
-                    stream: ModelProvider
-                        .of(context)
-                        .updateWeatherCommand
-                        .canExecute,
-                    // We access our ViewModel through the inherited Widget
-                    builder: (context, snapshot) {
-                      return new RaisedButton(
-                        key: AppKeys.updateButton,
-                        child: new Text("Update"),
-                        onPressed: snapshot.hasData && snapshot.data
-                            ? () => ModelProvider
-                                .of(context)
-                                .updateWeatherCommand(_controller.text)
-                            : null,
-                      );
-                    },
-                  ),
+                    child: 
+                    // This might be solved with a Streambuilder to but it should show `WidgetSelector`
+                    new WidgetSelector(
+                                    buildEvents: ModelProvider.of(context).updateWeatherCommand.canExecute,   //We access our ViewModel through the inherited Widget
+                                    onTrue:  new RaisedButton(    
+                                                    key: AppKeys.updateButtonEnabled,                           
+                                                    child: new Text("Update"), 
+                                                    onPressed: ModelProvider.of(context).updateWeatherCommand,
+                                                    ),
+                                    onFalse:  new RaisedButton(                               
+                                                    key: AppKeys.updateButtonDisabled,                           
+                                                    child: new Text("Please Wait"), 
+                                                    onPressed: null,
+                                                    ),
+                            
+                        ),
                 ),
                 new StateFullSwitch(
-                  state: true,
-                  onChanged: ModelProvider.of(context).switchChangedCommand,
-                )
+                        state: true,
+                        onChanged: ModelProvider.of(context).switchChangedCommand,
+                   )
               ],
             ),
           ),

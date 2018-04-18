@@ -8,6 +8,7 @@ class AppKeys {
   static final Key weatherList = new Key('weatherList');
   static final Key cityList = new Key('cityList');
   static final Key loadingSpinner = new Key('loadingSpinner');
-  static final Key updateButton = new Key('updateButton');
+  static final Key updateButtonEnabled = new Key('updateButtonEnabled');
+  static final Key updateButtonDisabled = new Key('updateButtonDisabled');
   static final Key updateSwitch = new Key('updateSwitch');
 }
