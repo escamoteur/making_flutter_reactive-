@@ -17,7 +17,7 @@ dependencies:
 dev_dependencies: 
   test: ^0.12.32
   mockito: ^2.2.3
-  quiver: ^0.28.0
+  quiver: ^0.29.0
   build_runner: ^0.8.0
   json_serializable: ^0.4.0
   flutter_test:
