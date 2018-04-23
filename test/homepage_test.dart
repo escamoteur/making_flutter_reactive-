@@ -6,11 +6,12 @@ import 'package:flutter_weather_demo/homepage/homepage.dart';
 import 'package:flutter_weather_demo/homepage/homepage_model.dart';
 import 'package:flutter_weather_demo/keys.dart';
 import 'package:flutter_weather_demo/model_provider.dart';
+import 'package:flutter_weather_demo/service/weather_entry.dart';
 import 'package:mockito/mockito.dart';
 import 'package:rx_command/rx_command.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../lib/service/weather_entry.dart';
+
 
 class MockModel extends Mock implements HomePageModel {}
 
@@ -27,6 +28,7 @@ main() {
         child: new MaterialApp(home: new HomePage()),
       );
 
+      // we have to use .stream here because the mock framework doesn't work without
       when(command.stream).thenReturn(new Observable<CommandResult<WeatherEntry>>.just(new CommandResult<WeatherEntry>(null, null, true)));
       when(command.canExecute).thenReturn(new Observable<bool>.just(false));
       when(model.updateWeatherCommand).thenReturn(command);
@@ -43,7 +45,7 @@ main() {
 //      when(command.canExecute).thenReturn(new Observable<bool>.just(true));
 
 
- /*    testWidgets('Shows the weather list when done executing', (tester) async {
+     testWidgets('Shows the weather list when done executing', (tester) async {
       final model = new MockModel();
       final command = new MockCommand();
       final widget = new ModelProvider(
@@ -51,8 +53,10 @@ main() {
         child: new MaterialApp(home: new HomePage()),
       );
 
+      // we have to use .stream here because the mock framework doesn't work without
+      when(command.stream).thenReturn(new Observable<CommandResult<WeatherEntry>>.just(new CommandResult<WeatherEntry>(new WeatherEntry("Test",0.0,0.0,"TestCondition",0), null, false)));
+      when(command.canExecute).thenReturn(new Observable<bool>.just(false));
       when(model.updateWeatherCommand).thenReturn(command);
-      when(command).thenAnswer((_) => new Observable<CommandResult<WeatherEntry>>.just(new CommandResult<WeatherEntry>(new WeatherEntry("Test",0.0,0.0,"TestCondition",0), null, false)));
 
       await tester.pumpWidget(widget); // Build initial State
       await tester.pump(); // Build after Stream delivers value
@@ -61,6 +65,8 @@ main() {
       expect(find.byKey(AppKeys.weatherList), findsOneWidget);
     });
  
+ 
+ /*
     testWidgets('Shows the place holder if no data', (tester) async {
       final model = new MockModel();
       final command = new MockCommand();

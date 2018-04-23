@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather_demo/homepage/weather_list_view.dart';
 import 'package:flutter_weather_demo/keys.dart';
 import 'package:flutter_weather_demo/model_provider.dart';
+import 'package:flutter_weather_demo/service/weather_entry.dart';
 import 'package:rx_widgets/rx_widgets.dart';
 
-import '../service/weather_entry.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -41,7 +41,7 @@ class HomePageState extends State<HomePage> {
                 RxLoader<List<WeatherEntry>>(
                         key: AppKeys.loadingSpinner,
                         radius: 25.0,
-                        commandResults: ModelProvider.of(context).updateWeatherCommand.stream,
+                        commandResults: ModelProvider.of(context).updateWeatherCommand,
                         dataBuilder: (context, data) => WeatherListView(data ,key: AppKeys.weatherList),
                         ),
           ),
