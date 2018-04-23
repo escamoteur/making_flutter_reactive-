@@ -1,8 +1,4 @@
-# flutter_weather_demo
+# Making Flutter more reactive
 
-A new Flutter project.
-
-## Getting Started
-
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+This is the demo application for the blog post
+[Making Flutter more reactive](https://www.burkharts.net/apps/blog/making-flutter-more-reactive/)
