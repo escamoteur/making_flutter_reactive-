@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_weather_demo/homepage/homepage.dart';
-import 'package:flutter_weather_demo/homepage/homepage_model.dart';
-import 'package:flutter_weather_demo/model_provider.dart';
-import 'package:flutter_weather_demo/service/weather_service.dart';
+import 'package:making_flutter_more_reactive/homepage/homepage.dart';
+import 'package:making_flutter_more_reactive/homepage/homepage_model.dart';
+import 'package:making_flutter_more_reactive/model_provider.dart';
+import 'package:making_flutter_more_reactive/service/weather_service.dart';
 import 'package:http/http.dart' as http;
 
 void main() {

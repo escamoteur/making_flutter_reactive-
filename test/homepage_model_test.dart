@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter_weather_demo/homepage/homepage_model.dart';
-import 'package:flutter_weather_demo/service/weather_entry.dart';
-import 'package:flutter_weather_demo/service/weather_service.dart';
 import 'package:mockito/mockito.dart';
+import 'package:mockito/src/mock.dart';
 import 'package:quiver/testing/async.dart';
+import 'package:making_flutter_more_reactive/homepage/homepage_model.dart';
+import 'package:making_flutter_more_reactive/service/weather_entry.dart';
+import 'package:making_flutter_more_reactive/service/weather_service.dart';
 import 'package:test/test.dart';
 
 class MockService extends Mock implements WeatherService {}
@@ -15,32 +16,19 @@ main() {
       final service = new MockService();
       final model = new HomePageModel(service); // ignore: unused_local_variable
 
-      when(service.getWeatherEntriesForCity(typed(any)))
+      when(service.getWeatherEntriesForCity(typed(any as ArgMatcher)))
           .thenAnswer((_) => new Future.sync(() => <WeatherEntry>[]));
 
       expect(model.updateWeatherCommand.results, emits([]));
     });
 
-    test('should fetch with filter', () async {
-      final service = new MockService();
-      final model = new HomePageModel(service);
-      final future = new Future.sync(() => <WeatherEntry>[]);
 
-      when(service.getWeatherEntriesForCity(typed(any)))
-          .thenAnswer((_) => future);
-
-      //updateWeatherCommand call on creation of the HomePageModel
-      expect(model.updateWeatherCommand.results, emits([]));
-
-      model.updateWeatherCommand('A');
-      expect(model.updateWeatherCommand.results, emits(['A']));
-    });
 
     test('should not fetch if switch is off', () async {
       final service = new MockService();
       final model = new HomePageModel(service);
 
-      when(service.getWeatherEntriesForCity(typed(any)))
+      when(service.getWeatherEntriesForCity(typed(any as ArgMatcher)))
           .thenAnswer((_) => new Future.sync(() => <WeatherEntry>[]));
 
       model.switchChangedCommand(false);
@@ -54,7 +42,7 @@ main() {
         final service = new MockService();
         final model = new HomePageModel(service);
 
-        when(service.getWeatherEntriesForCity(typed(any)))
+        when(service.getWeatherEntriesForCity(typed(any as ArgMatcher)))
             .thenAnswer((_) => new Future.sync(() => <WeatherEntry>[]));
 
         model.textChangedCommand('A');
@@ -70,7 +58,7 @@ main() {
         final service = new MockService();
         final model = new HomePageModel(service);
 
-        when(service.getWeatherEntriesForCity(typed(any)))
+        when(service.getWeatherEntriesForCity(typed(any as ArgMatcher)))
             .thenAnswer((_) => new Future.sync(() => <WeatherEntry>[]));
 
         model.textChangedCommand('A');

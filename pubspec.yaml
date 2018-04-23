@@ -1,4 +1,4 @@
-name: flutter_weather_demo
+name: making_flutter_more_reactive
 description: A new Flutter project.
 
 dependencies:
@@ -9,17 +9,20 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.0
   rxdart : 0.16.6
-  json_annotation: ^0.2.2
-  http: "^0.11.3+16"
-  rx_command: ^1.0.3
-  rx_widgets: ^1.0.1
-
+  json_annotation: ^0.2.3
+  http: "^0.11.3+16" 
+  rx_command: ^1.0.7   
+ # rx_command:
+ #   path: ..\..\rx_command\ 
+  rx_widgets: ^1.0.2
+    
+ 
 dev_dependencies: 
   test: ^0.12.32
-  mockito: ^2.2.3
-  quiver: ^0.29.0
+  mockito: ^3.0.0-alpha+4
+  quiver: ^0.29.0 
   build_runner: ^0.8.0
-  json_serializable: ^0.4.0
+  json_serializable: ^0.5.0
   flutter_test:
     sdk: flutter
 

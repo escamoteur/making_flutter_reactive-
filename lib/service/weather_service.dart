@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter_weather_demo/service/json/weather_in_cities.dart';
-import 'package:flutter_weather_demo/service/weather_entry.dart';
+import 'package:making_flutter_more_reactive/service/json/weather_in_cities.dart';
+import 'package:making_flutter_more_reactive/service/weather_entry.dart';
 import 'package:http/http.dart' as http;
 
 class WeatherService {
@@ -17,7 +17,7 @@ class WeatherService {
     final response = await client.get(url);
 
     if (response.statusCode == 200) {
-      return new WeatherInCities.fromJson(json.decode(response.body))
+      return new WeatherInCities.fromJson(json.decode(response.body) as Map<String,dynamic>)
           .cities
           .where((weatherInCity) =>
               filter == null ||

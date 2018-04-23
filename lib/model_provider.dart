@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_weather_demo/homepage/homepage_model.dart';
+import 'package:making_flutter_more_reactive/homepage/homepage_model.dart';
+
 
 // InheritedWidgets allow you to propagate values down the Widget Tree.
 // it can then be accessed by just writing  TheViewModel.of(context)

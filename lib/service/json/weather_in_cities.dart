@@ -1,3 +1,5 @@
+// ignore_for_file: annotate_overrides
+
 import "package:json_annotation/json_annotation.dart";
 
 part "weather_in_cities.g.dart";

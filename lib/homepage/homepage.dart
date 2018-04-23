@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_weather_demo/homepage/weather_list_view.dart';
-import 'package:flutter_weather_demo/keys.dart';
-import 'package:flutter_weather_demo/model_provider.dart';
-import 'package:flutter_weather_demo/service/weather_entry.dart';
+import 'package:making_flutter_more_reactive/homepage/weather_list_view.dart';
+import 'package:making_flutter_more_reactive/keys.dart';
+import 'package:making_flutter_more_reactive/model_provider.dart';
 import 'package:rx_widgets/rx_widgets.dart';
 
+import 'package:making_flutter_more_reactive/service/weather_entry.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -39,10 +39,12 @@ class HomePageState extends State<HomePage> {
           Expanded(
                 child: 
                 RxLoader<List<WeatherEntry>>(
-                        key: AppKeys.loadingSpinner,
+                        spinnerKey: AppKeys.loadingSpinner,
                         radius: 25.0,
                         commandResults: ModelProvider.of(context).updateWeatherCommand,
                         dataBuilder: (context, data) => WeatherListView(data ,key: AppKeys.weatherList),
+                        placeHolderBuilder: (context) => Center(key: AppKeys.loaderPlaceHolder, child: Text("No Data")),
+                        errorBuilder: (context, ex) => Center(key: AppKeys.loaderError, child: Text("Error: ${ex.toString()}")),
                         ),
           ),
           Padding(
@@ -58,8 +60,12 @@ class HomePageState extends State<HomePage> {
                             onTrue:  RaisedButton(    
                                             key: AppKeys.updateButtonEnabled,                           
                                             child: Text("Update"), 
-                                            onPressed: ModelProvider.of(context).updateWeatherCommand,
-                                            ),
+                                            onPressed: ()  
+                                                {
+                                                  _controller.clear();
+                                                  ModelProvider.of(context).updateWeatherCommand();
+                                                }
+                                        ),
                             onFalse:  RaisedButton(                               
                                             key: AppKeys.updateButtonDisabled,                           
                                             child: Text("Please Wait"), 

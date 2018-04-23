@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_weather_demo/keys.dart';
-import 'package:flutter_weather_demo/service/weather_entry.dart';
-import 'package:flutter_weather_demo/weather_icons.dart';
+import 'package:making_flutter_more_reactive/keys.dart';
+import 'package:making_flutter_more_reactive/service/weather_entry.dart';
+import 'package:making_flutter_more_reactive/weather_icons.dart';
 
 
 class WeatherListView extends StatelessWidget {

@@ -1,6 +1,7 @@
-import 'package:flutter_weather_demo/service/weather_entry.dart';
-import 'package:flutter_weather_demo/service/weather_service.dart';
+
 import 'package:rx_command/rx_command.dart';
+import 'package:making_flutter_more_reactive/service/weather_service.dart';
+import 'package:making_flutter_more_reactive/service/weather_entry.dart';
 
 class HomePageModel {
   final WeatherService service;
@@ -15,7 +16,7 @@ class HomePageModel {
     this.service,
   );
 
-  factory HomePageModel(WeatherService service) {
+  factory HomePageModel(WeatherService service ) {
     // Command expects a bool value when executed and issues the value on it's
     // result Observable (stream)
     final _switchChangedCommand = RxCommand.createSync3<bool, bool>((b) => b);

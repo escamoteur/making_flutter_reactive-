@@ -2,25 +2,28 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_weather_demo/homepage/homepage.dart';
-import 'package:flutter_weather_demo/homepage/homepage_model.dart';
-import 'package:flutter_weather_demo/keys.dart';
-import 'package:flutter_weather_demo/model_provider.dart';
-import 'package:flutter_weather_demo/service/weather_entry.dart';
 import 'package:mockito/mockito.dart';
 import 'package:rx_command/rx_command.dart';
+import 'package:making_flutter_more_reactive/homepage/homepage.dart';
+import 'package:making_flutter_more_reactive/homepage/homepage_model.dart';
+import 'package:making_flutter_more_reactive/keys.dart';
+import 'package:making_flutter_more_reactive/model_provider.dart';
+import 'package:making_flutter_more_reactive/service/weather_entry.dart';
+import 'package:collection/collection.dart';
 import 'package:rxdart/rxdart.dart';
 
 
 
 class MockModel extends Mock implements HomePageModel {}
 
-class MockCommand<TParam,TResult> extends Mock implements RxCommand<TParam,TResult> {}
+//class MockCommand<TParam,TResult> extends Mock implements RxCommand<TParam,TResult> {}
+
+
 class MockStream<T>  extends Mock implements Stream<T>{}
 
 main() {
   group('HomePage', () {
-    testWidgets('Shows a loading spinner when executing and disables the button', (tester) async {
+    testWidgets('Shows a loading spinner and disables the button while executing and shows the ListView on data arrival', (tester) async {
       final model = new MockModel();
       final command = new MockCommand<String,List<WeatherEntry>>();
       final widget = new ModelProvider(
@@ -28,138 +31,296 @@ main() {
         child: new MaterialApp(home: new HomePage()),
       );
 
-      // we have to use .stream here because the mock framework doesn't work without
-      when(command.stream).thenReturn(new Observable<CommandResult<WeatherEntry>>.just(new CommandResult<WeatherEntry>(null, null, true)));
-      when(command.canExecute).thenReturn(new Observable<bool>.just(false));
-      when(model.updateWeatherCommand).thenReturn(command);
+      when(model.updateWeatherCommand).thenAnswer((_)=>command);
 
-      await tester.pumpWidget(widget);
+//      model.updateWeatherCommand.canExecute.listen((b) => print("Can exceute: $b"));
+//      model.updateWeatherCommand.isExecuting.listen((b) => print("Is Exceuting: $b"));
+
+      await tester.pumpWidget(widget);// Build initial State
+      await tester.pump(); 
+
+      expect(find.byKey(AppKeys.loadingSpinner), findsNothing);
+      expect(find.byKey(AppKeys.updateButtonDisabled), findsNothing);
+      expect(find.byKey(AppKeys.updateButtonEnabled), findsOneWidget);
+      expect(find.byKey(AppKeys.weatherList), findsNothing);
+      expect(find.byKey(AppKeys.loaderError), findsNothing);
+      expect(find.byKey(AppKeys.loaderPlaceHolder), findsOneWidget);
+
+
+      command.startExecution();
+      await tester.pump(); 
+      await tester.pump();  //because there are two streams involded it seems we have to pump twice so that both streambuilders can work
 
       expect(find.byKey(AppKeys.loadingSpinner), findsOneWidget);
       expect(find.byKey(AppKeys.updateButtonDisabled), findsOneWidget);
+      expect(find.byKey(AppKeys.updateButtonEnabled), findsNothing);
       expect(find.byKey(AppKeys.weatherList), findsNothing);
+      expect(find.byKey(AppKeys.loaderError), findsNothing);
+      expect(find.byKey(AppKeys.loaderPlaceHolder), findsNothing);
+
+      command.endExecutionWithData([new WeatherEntry("London", 10.0, 30.0, "sunny", 12)]);
+      await tester.pump(); // Build after Stream delivers value
+
+      expect(find.byKey(AppKeys.loadingSpinner), findsNothing);
+      expect(find.byKey(AppKeys.updateButtonDisabled), findsNothing);
+      expect(find.byKey(AppKeys.updateButtonEnabled), findsOneWidget);
+      expect(find.byKey(AppKeys.weatherList), findsOneWidget);
+      expect(find.byKey(AppKeys.loaderError), findsNothing);
+      expect(find.byKey(AppKeys.loaderPlaceHolder), findsNothing);
     });
 
 
-//      when(command.stream).thenReturn(new Observable<CommandResult<WeatherEntry>>.just(new CommandResult<WeatherEntry>(new WeatherEntry("Test",0.0,0.0,"TestCondition",0), null, true)));
-//      when(command.canExecute).thenReturn(new Observable<bool>.just(true));
-
-
-     testWidgets('Shows the weather list when done executing', (tester) async {
+    testWidgets('shows place holder due to no data', (tester) async {
       final model = new MockModel();
-      final command = new MockCommand();
+      final command = new MockCommand<String,List<WeatherEntry>>();
       final widget = new ModelProvider(
         model: model,
         child: new MaterialApp(home: new HomePage()),
       );
 
-      // we have to use .stream here because the mock framework doesn't work without
-      when(command.stream).thenReturn(new Observable<CommandResult<WeatherEntry>>.just(new CommandResult<WeatherEntry>(new WeatherEntry("Test",0.0,0.0,"TestCondition",0), null, false)));
-      when(command.canExecute).thenReturn(new Observable<bool>.just(false));
-      when(model.updateWeatherCommand).thenReturn(command);
+      when(model.updateWeatherCommand).thenAnswer((_)=>command);
 
-      await tester.pumpWidget(widget); // Build initial State
+ //     model.updateWeatherCommand.canExecute.listen((b) => print("Can exceute: $b"));
+ //     model.updateWeatherCommand.isExecuting.listen((b) => print("Is Exceuting: $b"));
+
+      await tester.pumpWidget(widget);// Build initial State
+      await tester.pump(); 
+
+      expect(find.byKey(AppKeys.loadingSpinner), findsNothing);
+      expect(find.byKey(AppKeys.updateButtonDisabled), findsNothing);
+      expect(find.byKey(AppKeys.updateButtonEnabled), findsOneWidget);
+      expect(find.byKey(AppKeys.weatherList), findsNothing);
+      expect(find.byKey(AppKeys.loaderError), findsNothing);
+      expect(find.byKey(AppKeys.loaderPlaceHolder), findsOneWidget);
+
+
+      command.startExecution();
+      await tester.pump(); 
+      await tester.pump();  //because there are two streams involded it seems we have to pump twice so that both streambuilders can work
+
+      expect(find.byKey(AppKeys.loadingSpinner), findsOneWidget);
+      expect(find.byKey(AppKeys.updateButtonDisabled), findsOneWidget);
+      expect(find.byKey(AppKeys.updateButtonEnabled), findsNothing);
+      expect(find.byKey(AppKeys.weatherList), findsNothing);
+      expect(find.byKey(AppKeys.loaderError), findsNothing);
+      expect(find.byKey(AppKeys.loaderPlaceHolder), findsNothing);
+
+      command.endExecutionWithData(null);
       await tester.pump(); // Build after Stream delivers value
 
       expect(find.byKey(AppKeys.loadingSpinner), findsNothing);
-      expect(find.byKey(AppKeys.weatherList), findsOneWidget);
+      expect(find.byKey(AppKeys.updateButtonDisabled), findsNothing);
+      expect(find.byKey(AppKeys.updateButtonEnabled), findsOneWidget);
+      expect(find.byKey(AppKeys.weatherList), findsNothing);
+      expect(find.byKey(AppKeys.loaderError), findsNothing);
+      expect(find.byKey(AppKeys.loaderPlaceHolder), findsOneWidget);
     });
- 
- 
- /*
-    testWidgets('Shows the place holder if no data', (tester) async {
+
+    testWidgets('Shows error view due to received error', (tester) async {
       final model = new MockModel();
-      final command = new MockCommand();
+      final command = new MockCommand<String,List<WeatherEntry>>();
       final widget = new ModelProvider(
         model: model,
         child: new MaterialApp(home: new HomePage()),
       );
 
-      when(model.updateWeatherCommand).thenReturn(command);
-      when(command.isExecuting).thenAnswer((_) => new Observable.just(false));
+      when(model.updateWeatherCommand).thenAnswer((_)=>command);
 
-      await tester.pumpWidget(widget); // Build initial State
+ //     model.updateWeatherCommand.canExecute.listen((b) => print("Can exceute: $b"));
+ //     model.updateWeatherCommand.isExecuting.listen((b) => print("Is Exceuting: $b"));
+
+      await tester.pumpWidget(widget);// Build initial State
+      await tester.pump(); 
+
+      expect(find.byKey(AppKeys.loadingSpinner), findsNothing);
+      expect(find.byKey(AppKeys.updateButtonDisabled), findsNothing);
+      expect(find.byKey(AppKeys.updateButtonEnabled), findsOneWidget);
+      expect(find.byKey(AppKeys.weatherList), findsNothing);
+      expect(find.byKey(AppKeys.loaderError), findsNothing);
+      expect(find.byKey(AppKeys.loaderPlaceHolder), findsOneWidget);
+
+
+      command.startExecution();
+      await tester.pump(); 
+      await tester.pump();  //because there are two streams involded it seems we have to pump twice so that both streambuilders can work
+
+      expect(find.byKey(AppKeys.loadingSpinner), findsOneWidget);
+      expect(find.byKey(AppKeys.updateButtonDisabled), findsOneWidget);
+      expect(find.byKey(AppKeys.updateButtonEnabled), findsNothing);
+      expect(find.byKey(AppKeys.weatherList), findsNothing);
+      expect(find.byKey(AppKeys.loaderError), findsNothing);
+      expect(find.byKey(AppKeys.loaderPlaceHolder), findsNothing);
+
+      command.endExecutionWithError("Intentional");
       await tester.pump(); // Build after Stream delivers value
 
       expect(find.byKey(AppKeys.loadingSpinner), findsNothing);
-      expect(find.byKey(AppKeys.weatherList), findsOneWidget);
+      expect(find.byKey(AppKeys.updateButtonDisabled), findsNothing);
+      expect(find.byKey(AppKeys.updateButtonEnabled), findsOneWidget);
+      expect(find.byKey(AppKeys.weatherList), findsNothing);
+      expect(find.byKey(AppKeys.loaderError), findsOneWidget);
+      expect(find.byKey(AppKeys.loaderPlaceHolder), findsNothing);
     });
+
+
+ 
 
     testWidgets('Tapping update button updates the weather', (tester) async {
       final model = new MockModel();
-      final command = new MockCommand();
-      final widget = new ModelProvider(
+     final command = new MockCommand<String,List<WeatherEntry>>();
+       final widget = new ModelProvider(
         model: model,
         child: new MaterialApp(home: new HomePage()),
       );
 
-      when(command.canExecute).thenAnswer((_) => new Observable.just(true));
-      when(model.updateWeatherCommand).thenReturn(command);
+      when(model.updateWeatherCommand).thenAnswer((_)=>command);
+      when(model.updateWeatherCommand()).thenAnswer((_)=>command());
+
+      command.queueResultsForNextExecuteCall([CommandResult<List<WeatherEntry>>(
+                  [WeatherEntry("London", 10.0, 30.0, "sunny", 12)],null, false)]);
+
+      expect(command, emitsInOrder([ crm(null, false, false), crm([WeatherEntry("London", 10.0, 30.0, "sunny", 12)], false, false) ]));
+
+      command.listen((data)=> print("Received: " + data.data.toString()));
 
       await tester.pumpWidget(widget); // Build initial State
       await tester.pump(); // Build after Stream delivers value
-      await tester.tap(find.byKey(AppKeys.updateButton));
+      await tester.tap(find.byKey(AppKeys.updateButtonEnabled));
 
-      verify(model.updateWeatherCommand(''));
+
     });
 
-    testWidgets('update button updates using the text filter', (tester) async {
+    testWidgets('calls updateWeatherCommand after  text was entered in the textfield', (tester) async {
       final model = new MockModel();
-      final command = new MockCommand();
+      final commandUpdate = new MockCommand<String,List<WeatherEntry>>(); 
+      final commandTextChange = new MockCommand<String,String>();
       final widget = new ModelProvider(
         model: model,
         child: new MaterialApp(home: new HomePage()),
       );
 
-      when(command.canExecute).thenAnswer((_) => new Observable.just(true));
-      when(model.updateWeatherCommand).thenReturn(command);
-
+      when(model.updateWeatherCommand).thenAnswer((_)=>commandUpdate); //Allways needed because RxLoader binds to it
+      when(model.textChangedCommand).thenAnswer((_)=>commandTextChange);
+ 
       await tester.pumpWidget(widget); // Build initial State
-      await tester.enterText(find.byKey(AppKeys.textField), 'Berlin');
+      await tester.enterText(find.byKey(AppKeys.textField), 'London');
       await tester.pump(); // Build after text entered
-      await tester.tap(find.byKey(AppKeys.updateButton));
+      await tester.tap(find.byKey(AppKeys.updateButtonEnabled));
 
-      verify(model.updateWeatherCommand('Berlin'));
+      expect(commandTextChange.lastPassedValueToExecute,"London");
     });
 
-    testWidgets('cannot tap update button when disabled', (tester) async {
+
+
+    testWidgets('cannot tap update  when commandUpdate is  disabled', (tester) async {
       final model = new MockModel();
-      final command = new MockCommand();
+      final commandUpdate = new MockCommand<String,List<WeatherEntry>>(canExecute:  new Observable.just(false)); 
+
       final widget = new ModelProvider(
         model: model,
         child: new MaterialApp(home: new HomePage()),
       );
 
-      when(command.canExecute).thenAnswer((_) => new Observable.just(false));
-      when(model.updateWeatherCommand).thenReturn(command);
+      when(model.updateWeatherCommand).thenAnswer((_)=>commandUpdate); //Allways needed because RxLoader binds to it
+      when(model.updateWeatherCommand()).thenAnswer((_)=>commandUpdate());
+
 
       await tester.pumpWidget(widget); // Build initial State
       await tester.pump(); // Build after Stream delivers value
-      await tester.tap(find.byKey(AppKeys.updateButton));
+      await tester.pump(); // Build after Stream delivers value
 
-      verifyNever(model.updateWeatherCommand(''));
+     expect(find.byKey(AppKeys.updateButtonDisabled), findsOneWidget); // should display disabled button
+     expect(find.byKey(AppKeys.updateButtonEnabled), findsNothing); // should not display enabled button
+
+
+      await tester.tap(find.byKey(AppKeys.updateButtonDisabled));
+
+      expect(commandUpdate.executionCount, 0);
     });
+
+
 
     testWidgets('tapping switch toggles model', (tester) async {
       final model = new MockModel();
-      final updateCommand = new MockCommand();
-      final switchCommand = new MockCommand();
+      final updateCommand = new MockCommand<String,List<WeatherEntry>>(canExecute:  new Observable.just(false)); 
+      final switchCommand = new MockCommand<bool,bool>();
       final widget = new ModelProvider(
         model: model,
         child: new MaterialApp(home: new HomePage()),
       );
 
-      when(model.updateWeatherCommand).thenReturn(updateCommand);
-      when(updateCommand.isExecuting)
-          .thenAnswer((_) => new Observable.just(true));
-      when(model.switchChangedCommand).thenReturn(switchCommand);
+      when(model.updateWeatherCommand).thenAnswer((_) => updateCommand);
+      when(model.switchChangedCommand).thenAnswer((_) => switchCommand);
 
       await tester.pumpWidget(widget); // Build initial State
-      await tester.pumpWidget(widget); // Build initial State
+      await tester.pump(); 
+
       await tester.tap(find.byKey(AppKeys.updateSwitch));
 
       // Starts out true, tapping should go false
-      verify(switchCommand.call(false));
-    });*/
+      expect(switchCommand.lastPassedValueToExecute, false);
+      await tester.pump(); 
+
+      // tap again
+      await tester.tap(find.byKey(AppKeys.updateSwitch));
+
+      expect(switchCommand.lastPassedValueToExecute, true);
+    });
+
+
+    testWidgets('Tapping update button clears the filter field', (tester) async {
+      final model = new MockModel();
+      final command = new MockCommand<String,List<WeatherEntry>>();
+      final widget = new ModelProvider(
+        model: model,
+        child: new MaterialApp(home: new HomePage()),
+      );
+
+      when(model.updateWeatherCommand).thenAnswer((_) =>command);
+
+
+      await tester.pumpWidget(widget); // Build initial State
+      await tester.enterText(find.byKey(AppKeys.textField), 'London');
+
+      await tester.pump(); // Build after Stream delivers value
+      await tester.tap(find.byKey(AppKeys.updateButtonEnabled));
+    
+      expect(tester.widget<TextField>(find.byKey(AppKeys.textField)).controller.text.length, 0);
+
+    });
+
+
+
   });
 }
+
+
+
+
+
+
+
+  StreamMatcher crm(List<WeatherEntry> data, bool hasError, bool isExceuting)
+  {
+      return new StreamMatcher((x) async {
+                                              CommandResult<List<WeatherEntry>> event =  await x.next;
+                                              if (event.data != null)
+                                              {
+                                                 if (!ListEquality().equals(event.data, data))
+                                                 {
+                                                   return "Data not equal";
+                                                 }
+                                              }    
+
+                                              if (!hasError && event.error != null)
+                                                return "Had error while not expected";
+
+                                              if (hasError && !(event.error is Exception))
+                                                return "Wong error type";
+
+                                              if (event.isExecuting != isExceuting)
+                                                return "Wong isExecuting $isExceuting";
+
+                                              return null;
+                                          }, "Wrong value emmited:");
+  }
