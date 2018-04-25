@@ -25,7 +25,7 @@ class HomePageModel {
     // the updateWeatherCommand
     final _updateWeatherCommand =
         RxCommand.createAsync3<String, List<WeatherEntry>>(
-            service.getWeatherEntriesForCity, _switchChangedCommand.results);
+            service.getWeatherEntriesForCity, canExecute:  _switchChangedCommand.results);
 
     // Will be called on every change of the search field
     final _textChangedCommand = RxCommand.createSync3<String, String>((s) => s);

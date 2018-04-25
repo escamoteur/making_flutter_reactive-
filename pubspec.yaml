@@ -11,10 +11,10 @@ dependencies:
   rxdart : 0.16.6
   json_annotation: ^0.2.3
   http: "^0.11.3+16" 
-  rx_command: ^1.0.7   
+  rx_command: ^1.0.8   
  # rx_command:
  #   path: ..\..\rx_command\ 
-  rx_widgets: ^1.0.2
+  rx_widgets: ^1.0.3
     
  
 dev_dependencies: 

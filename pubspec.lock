@@ -360,14 +360,14 @@ packages:
       name: rx_command
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.7"
+    version: "1.0.8"
   rx_widgets:
     dependency: "direct main"
     description:
       name: rx_widgets
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.3"
   rxdart:
     dependency: "direct main"
     description:

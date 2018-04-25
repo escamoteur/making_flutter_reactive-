@@ -179,7 +179,7 @@ main() {
       command.queueResultsForNextExecuteCall([CommandResult<List<WeatherEntry>>(
                   [WeatherEntry("London", 10.0, 30.0, "sunny", 12)],null, false)]);
 
-      expect(command, emitsInOrder([ crm(null, false, false), crm([WeatherEntry("London", 10.0, 30.0, "sunny", 12)], false, false) ]));
+      expect(command, emitsInOrder([ crm([WeatherEntry("London", 10.0, 30.0, "sunny", 12)], false, false) ]));
 
       command.listen((data)=> print("Received: " + data.data.toString()));
 
