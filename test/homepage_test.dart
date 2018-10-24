@@ -2,19 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:making_flutter_more_reactive/managers/app_manager.dart';
+import 'package:making_flutter_more_reactive/service_locator.dart';
 import 'package:mockito/mockito.dart';
 import 'package:rx_command/rx_command.dart';
 import 'package:making_flutter_more_reactive/homepage/homepage.dart';
-import 'package:making_flutter_more_reactive/homepage/homepage_model.dart';
 import 'package:making_flutter_more_reactive/keys.dart';
-import 'package:making_flutter_more_reactive/model_provider.dart';
-import 'package:making_flutter_more_reactive/service/weather_entry.dart';
+import 'package:making_flutter_more_reactive/services/weather_entry.dart';
 import 'package:collection/collection.dart';
 import 'package:rxdart/rxdart.dart';
 
 
 
-class MockModel extends Mock implements HomePageModel {}
+class MockModel extends Mock implements AppManager {}
 
 //class MockCommand<TParam,TResult> extends Mock implements RxCommand<TParam,TResult> {}
 
@@ -22,13 +22,13 @@ class MockModel extends Mock implements HomePageModel {}
 class MockStream<T>  extends Mock implements Stream<T>{}
 
 main() {
+  sl.allowReassignment = true;
   group('HomePage', () {
     testWidgets('Shows a loading spinner and disables the button while executing and shows the ListView on data arrival', (tester) async {
       final model = new MockModel();
+      sl.registerSingleton<AppManager>(model);
       final command = new MockCommand<String,List<WeatherEntry>>();
-      final widget = new ModelProvider(
-        model: model,
-        child: new MaterialApp(home: new HomePage()),
+      final widget = new MaterialApp(home: new HomePage(),
       );
 
       when(model.updateWeatherCommand).thenAnswer((_)=>command);
@@ -72,10 +72,9 @@ main() {
 
     testWidgets('shows place holder due to no data', (tester) async {
       final model = new MockModel();
+      sl.registerSingleton<AppManager>(model);
       final command = new MockCommand<String,List<WeatherEntry>>();
-      final widget = new ModelProvider(
-        model: model,
-        child: new MaterialApp(home: new HomePage()),
+      final widget = new MaterialApp(home: new HomePage(),
       );
 
       when(model.updateWeatherCommand).thenAnswer((_)=>command);
@@ -118,10 +117,9 @@ main() {
 
     testWidgets('Shows error view due to received error', (tester) async {
       final model = new MockModel();
+      sl.registerSingleton<AppManager>(model);
       final command = new MockCommand<String,List<WeatherEntry>>();
-      final widget = new ModelProvider(
-        model: model,
-        child: new MaterialApp(home: new HomePage()),
+      final widget = new MaterialApp(home: new HomePage(),
       );
 
       when(model.updateWeatherCommand).thenAnswer((_)=>command);
@@ -167,10 +165,9 @@ main() {
 
     testWidgets('Tapping update button updates the weather', (tester) async {
       final model = new MockModel();
-     final command = new MockCommand<String,List<WeatherEntry>>();
-       final widget = new ModelProvider(
-        model: model,
-        child: new MaterialApp(home: new HomePage()),
+      sl.registerSingleton<AppManager>(model);
+      final command = new MockCommand<String,List<WeatherEntry>>();
+      final widget = new MaterialApp(home: new HomePage(),
       );
 
       when(model.updateWeatherCommand).thenAnswer((_)=>command);
@@ -181,7 +178,7 @@ main() {
 
       expect(command, emitsInOrder([ crm([WeatherEntry("London", 10.0, 30.0, "sunny", 12)], false, false) ]));
 
-      command.listen((data)=> print("Received: " + data.data.toString()));
+      command.results.listen((data)=> print("Received: " + data.data.toString()));
 
       await tester.pumpWidget(widget); // Build initial State
       await tester.pump(); // Build after Stream delivers value
@@ -192,11 +189,10 @@ main() {
 
     testWidgets('calls updateWeatherCommand after  text was entered in the textfield', (tester) async {
       final model = new MockModel();
+      sl.registerSingleton<AppManager>(model);
       final commandUpdate = new MockCommand<String,List<WeatherEntry>>(); 
       final commandTextChange = new MockCommand<String,String>();
-      final widget = new ModelProvider(
-        model: model,
-        child: new MaterialApp(home: new HomePage()),
+      final widget = MaterialApp(home: new HomePage(),
       );
 
       when(model.updateWeatherCommand).thenAnswer((_)=>commandUpdate); //Allways needed because RxLoader binds to it
@@ -214,11 +210,10 @@ main() {
 
     testWidgets('cannot tap update  when commandUpdate is  disabled', (tester) async {
       final model = new MockModel();
+      sl.registerSingleton<AppManager>(model);
       final commandUpdate = new MockCommand<String,List<WeatherEntry>>(canExecute:  new Observable.just(false)); 
 
-      final widget = new ModelProvider(
-        model: model,
-        child: new MaterialApp(home: new HomePage()),
+      final widget = MaterialApp(home: new HomePage(),
       );
 
       when(model.updateWeatherCommand).thenAnswer((_)=>commandUpdate); //Allways needed because RxLoader binds to it
@@ -242,11 +237,10 @@ main() {
 
     testWidgets('tapping switch toggles model', (tester) async {
       final model = new MockModel();
+      sl.registerSingleton<AppManager>(model);
       final updateCommand = new MockCommand<String,List<WeatherEntry>>(canExecute:  new Observable.just(false)); 
       final switchCommand = new MockCommand<bool,bool>();
-      final widget = new ModelProvider(
-        model: model,
-        child: new MaterialApp(home: new HomePage()),
+      final widget = MaterialApp(home: new HomePage(),
       );
 
       when(model.updateWeatherCommand).thenAnswer((_) => updateCommand);
@@ -270,10 +264,9 @@ main() {
 
     testWidgets('Tapping update button clears the filter field', (tester) async {
       final model = new MockModel();
+      sl.registerSingleton<AppManager>(model);
       final command = new MockCommand<String,List<WeatherEntry>>();
-      final widget = new ModelProvider(
-        model: model,
-        child: new MaterialApp(home: new HomePage()),
+      final widget = MaterialApp(home: new HomePage(),
       );
 
       when(model.updateWeatherCommand).thenAnswer((_) =>command);

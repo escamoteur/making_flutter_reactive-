@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:making_flutter_more_reactive/keys.dart';
-import 'package:making_flutter_more_reactive/service/weather_entry.dart';
+import 'package:making_flutter_more_reactive/services/weather_entry.dart';
 import 'package:making_flutter_more_reactive/weather_icons.dart';
 
 

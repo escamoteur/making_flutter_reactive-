@@ -1,7 +1,7 @@
 
 import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
-import 'package:making_flutter_more_reactive/service/weather_service.dart';
+import 'package:making_flutter_more_reactive/services/weather_service.dart';
 import 'package:test/test.dart';
 
 class MockClient extends Mock implements http.Client {}
