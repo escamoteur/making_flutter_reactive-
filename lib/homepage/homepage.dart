@@ -41,6 +41,8 @@ class HomePageState extends State<HomePage> {
             ),
           ),
           Expanded(
+            /// RxLoader executes different builders based on the 
+            /// state of the Stream<CommandResult>
             child: RxLoader<List<WeatherEntry>>(
               spinnerKey: AppKeys.loadingSpinner,
               radius: 25.0,
@@ -58,21 +60,22 @@ class HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: <Widget>[
+                /// Buiding the Updatebutton depending on updateWeatherCommand.canExecute
                 Expanded(
-                  child:
-                      // This might be solved with a Streambuilder too but it should show `WidgetSelector`
-                      WidgetSelector(
+                  // This might be solved with a Streambuilder too but it should show `WidgetSelector`
+                  child: WidgetSelector(
                     buildEvents: sl
                         .get<AppManager>()
                         .updateWeatherCommand
                         .canExecute, //We access our ViewModel through the inherited Widget
                     onTrue: RaisedButton(
-                        key: AppKeys.updateButtonEnabled,
-                        child: Text("Update"),
-                        onPressed: () {
-                          _controller.clear();
-                          sl.get<AppManager>().updateWeatherCommand();
-                        }),
+                      key: AppKeys.updateButtonEnabled,
+                      child: Text("Update"),
+                      onPressed: () {
+                        _controller.clear();
+                        sl.get<AppManager>().updateWeatherCommand();
+                      },
+                    ),
                     onFalse: RaisedButton(
                       key: AppKeys.updateButtonDisabled,
                       child: Text("Please Wait"),
@@ -83,7 +86,7 @@ class HomePageState extends State<HomePage> {
                 StateFullSwitch(
                   state: true,
                   onChanged: sl.get<AppManager>().switchChangedCommand,
-                )
+                ),
               ],
             ),
           ),

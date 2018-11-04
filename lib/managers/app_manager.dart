@@ -16,8 +16,9 @@ class AppManager {
     // We pass the result of switchChangedCommand as canExecute Observable to
     // the updateWeatherCommand
     updateWeatherCommand = RxCommand.createAsync<String, List<WeatherEntry>>(
-        sl.get<WeatherService>().getWeatherEntriesForCity,
-        canExecute: switchChangedCommand);
+      sl.get<WeatherService>().getWeatherEntriesForCity,
+      canExecute: switchChangedCommand,
+    );
 
     // Will be called on every change of the search field
     textChangedCommand = RxCommand.createSync<String, String>((s) => s);
